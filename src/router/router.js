@@ -45,7 +45,7 @@ const service = r => require.ensure([], () => r(require('../page/service/service
 const questionDetail = r => require.ensure([], () => r(require('../page/service/children/questionDetail')), 'questionDetail')
 const find = r => require.ensure([], () => r(require('../page/find/find')), 'find')
 const download = r => require.ensure([], () => r(require('../page/download/download')), 'download')
-
+const vip = r => require.ensure([], () => r(require('../page/vip/vip')), 'vip')
 
 
 
@@ -54,6 +54,10 @@ export default [{
     component: App, //顶层路由，对应index.html
     children: [ //二级路由。对应App.vue
         //地址为空时跳转home页面
+        {
+            path: '/vip',
+            component: vip
+        },
         {
             path: '',
             redirect: '/msite'

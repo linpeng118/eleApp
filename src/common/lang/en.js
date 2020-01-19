@@ -1,0 +1,17 @@
+export const language = {
+    'nearbyBusinesses': "NearbyBusinesses",
+    'login': "Login",
+    'register': 'Register',
+    'myOrder': 'MyOrder',
+    'pointMall': 'PointMall',
+    'hopeTravelVip': 'HopeTravel VIP',
+    'serviceCenter': 'ServiceCenter',
+    'downloadApp': 'DownloadApp',
+    'mobile': 'No Mobile Phone Number',
+    'myBalance': 'MyBalance',
+    'myDiscount': 'MyDiscount',
+    'myPoint': 'MyPoint',
+    'vipCenter': 'Vip Center',
+    'orderList': 'Order List',
+    'search': 'Search',
+}

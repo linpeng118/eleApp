@@ -2,10 +2,7 @@
     <div>
     	<head-top signin-up='msite'>
     		<router-link :to="'/search/geohash'" class="link_search" slot="search">
-	    		<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" version="1.1">
-	    			<circle cx="8" cy="8" r="7" stroke="rgb(255,255,255)" stroke-width="1" fill="none"/>
-	    			<line x1="14" y1="14" x2="20" y2="20" style="stroke:rgb(255,255,255);stroke-width:2"/>
-	    		</svg>
+	    		<van-icon class="iconfont icon-sousuo"></van-icon>
     		</router-link>
 			<router-link to="/home" slot="msite-title" class="msite_title">
 				<span class="title_text ellipsis">{{msiteTitle}}</span>
@@ -32,7 +29,12 @@
 	    		<svg class="shop_icon">
 	    			<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#shop"></use>
 	    		</svg>
-	    		<span class="shop_header_title">附近商家</span>
+	    		<span class="shop_header_title">{{$t('language.nearbyBusinesses')}}</span>
+					<van-radio-group v-model="switchLanguage" @change="languageChange">
+						<van-radio class="inline" name="zh-CN">zh</van-radio>
+						<van-radio class="inline" name="en-US">en</van-radio>
+						<van-radio class="inline" name="tw-CN">tw</van-radio>
+					</van-radio-group>
 	    	</header>
 	    	<shop-list v-if="hasGetData" :geohash="geohash"></shop-list>
     	</div>
@@ -41,8 +43,10 @@
 </template>
 
 <script>
-import {mapMutations} from 'vuex'
+import { RadioGroup, Radio } from 'vant';
+import {mapState,mapMutations} from 'vuex'
 // import {imgBaseUrl} from 'src/config/env'
+import {getStore,setStore} from 'src/config/mUtils'
 import headTop from 'src/components/header/head'
 import footGuide from 'src/components/footer/footGuide'
 import shopList from 'src/components/common/shoplist'
@@ -53,6 +57,7 @@ import 'src/style/swiper.min.css'
 export default {
 	data(){
         return {
+					switchLanguage:'',
         	geohash: '', // city页面传递过来的地址geohash
             msiteTitle: '请选择地址...', // msite页面头部标题
             foodTypes: [], // 食品分类列表
@@ -75,9 +80,16 @@ export default {
     	// 记录当前经度纬度
     	this.RECORD_ADDRESS(res);
 
-    	this.hasGetData = true;
+			this.hasGetData = true;
+			
     },
     mounted(){
+			
+			if(getStore('language')){
+				/* this.switchLanguage=this.language || ''; */
+				this.switchLanguage = getStore('language')
+			}
+			/* this.MODIFY_LANGUAGE() */
         //获取导航食品类型列表
        	msiteFoodTypes(this.geohash).then(res => {
        		let resLength = res.length;
@@ -96,16 +108,21 @@ export default {
         })
     },
     components: {
+			[RadioGroup.name]:RadioGroup,
+      [Radio.name]:Radio,
     	headTop,
     	shopList,
-    	footGuide,
+			footGuide,
+			
     },
     computed: {
-
+			...mapState([
+				'language'
+			])
     },
     methods: {
     	...mapMutations([
-    		'RECORD_ADDRESS', 'SAVE_GEOHASH'
+    		'RECORD_ADDRESS', 'SAVE_GEOHASH','MODIFY_LANGUAGE',
     	]),
     	// 解码url地址，求去restaurant_category_id值
     	getCategoryId(url){
@@ -115,7 +132,13 @@ export default {
     		}else{
     			return ''
     		}
-    	}
+			},
+			languageChange(name){
+				console.log(name,'已选择语言');
+				 this.MODIFY_LANGUAGE(name)
+				this.$i18n.locale = name;
+				
+			}
     },
     watch: {
 
@@ -133,7 +156,7 @@ export default {
 	}
 	.msite_title{
 		@include center;
-        width: 50%;
+        width: 40%;
         color: #fff;
         text-align: center;
         margin-left: -0.5rem;
@@ -195,5 +218,10 @@ export default {
 			}
 		}
 	}
-
+	.inline{
+		display: inline-block;
+		.van-radio__icon{
+			display: inline-block !important;
+		}
+	}
 </style>

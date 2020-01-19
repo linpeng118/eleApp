@@ -1,9 +1,9 @@
 <template>
   	<div class="paddingTop search_page">
-        <head-top head-title="搜索" goBack="true"></head-top>
+        <head-top head-title="搜索" ></head-top>
         <form class="search_form">
-            <input type="search" name="search" placeholder="请输入商家或美食名称" class="search_input" v-model="searchValue" @input="checkInput">
-            <input type="submit" name="submit" class="search_submit" @click.prevent="searchTarget('')">
+            <input type="search" name="search" placeholder="请输入商家或美食" class="search_input" v-model="searchValue" @input="checkInput">
+            <input type="submit" name="submit" class="search_submit" value="搜索" @click.prevent="searchTarget('')">
         </form>
         <section v-if="restaurantList.length">
             <h4 class="title_restaurant">商家</h4>
@@ -41,10 +41,7 @@
             <ul>
                 <li v-for="(item, index) in searchHistory" :key="index" class="history_list">
                     <span class="history_text ellipsis" @click="searchTarget(item)">{{item}}</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="delete_icon" @click="deleteHistory(index)">
-                        <line x1="8" y1="8" x2="18" y2="18" style="stroke:#999;stroke-width:3" />
-                        <line x1="18" y1="8" x2="8" y2="18" style="stroke:#999;stroke-width:3" />
-                    </svg>
+                    <van-icon class="iconfont icon-delete delete_icon" @click="deleteHistory(index)"></van-icon>
                 </li>
             </ul>
             <footer class="clear_history" @click="clearAllHistory">清空搜索历史</footer>

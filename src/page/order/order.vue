@@ -1,6 +1,6 @@
  <template>
     <div class="order_page">
-        <head-top head-title="订单列表" go-back='true'></head-top>
+        <head-top head-title="订单列表"></head-top>
         <ul class="order_list_ul" v-load-more="loaderMore">
             <li class="order_list_li" v-for="item in orderList" :key="item.id">
                 <img :src="imgBaseUrl + item.restaurant_image_url" class="restaurant_image">

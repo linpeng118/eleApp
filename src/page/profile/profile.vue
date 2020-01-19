@@ -1,30 +1,26 @@
 <template>
     <div class="profile_page">
-        <head-top go-back='true' :head-title="profiletitle"></head-top>
+        <head-top :head-title="profiletitle"></head-top>
         <section>
             <section class="profile-number">
                 <router-link :to="userInfo&&userInfo.user_id? '/profile/info' : '/login'" class="profile-link">
                     <img :src="imgBaseUrl + userInfo.avatar" class="privateImage" v-if="userInfo&&userInfo.user_id">
                     <span class="privateImage" v-else>
-                        <svg class="privateImage-svg">
-                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#avatar-default"></use>
-                        </svg>
+                       <!-- <van-icon class="iconfont icon-morentouxiang privateimage"></van-icon> -->
                     </span>
                     <div class="user-info">
-                        <p>{{username}}</p>
+                        <p v-if="userInfo&&userInfo.user_id">{{username}}</p>
+                        <p v-else>{{$t('language.login')}}/{{$t('language.register')}}</p>
                         <p>
                             <span class="user-icon">
-                                <svg class="icon-mobile" fill="#fff">
-                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#mobile"></use>
-                                </svg>
+                               <van-icon class="iconfont icon-xiaoxi"></van-icon>
                             </span>
-                            <span class="icon-mobile-number">{{mobile}}</span>
+                            <span class="icon-mobile-number" v-if="userInfo&&userInfo.user_id">{{mobile}}</span>
+                            <span class="icon-mobile-number" v-else>{{$t('language.mobile')}}</span>
                         </p>
                     </div>
                     <span class="arrow">
-                        <svg class="arrow-svg" fill="#fff">
-                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
-                        </svg>
+                        <van-icon class="iconfont icon-gengduo"></van-icon>
                     </span>
                 </router-link>
             </section>
@@ -32,15 +28,15 @@
                 <ul class="clear">
                     <router-link to="/balance" tag="li" class="info-data-link">
                         <span class="info-data-top"><b>{{parseInt(balance).toFixed(2)}}</b>元</span>
-                        <span class="info-data-bottom">我的余额</span>
+                        <span class="info-data-bottom">{{$t('language.myBalance')}}</span>
                     </router-link>
                     <router-link to="/benefit" tag="li" class="info-data-link">
                         <span class="info-data-top"><b>{{count}}</b>个</span>
-                        <span class="info-data-bottom">我的优惠</span>
+                        <span class="info-data-bottom">{{$t('language.myDiscount')}}</span>
                     </router-link>
                     <router-link to="/points" tag="li" class="info-data-link">
                         <span class="info-data-top"><b>{{pointNumber}}</b>分</span>
-                        <span class="info-data-bottom">我的积分</span>
+                        <span class="info-data-bottom">{{$t('language.myPoint')}}</span>
                     </router-link>
                 </ul>
             </section>
@@ -48,48 +44,36 @@
                 <!-- 我的订单 -->
                 <router-link to='/order' class="myorder">
                     <aside>
-                        <svg fill="#4aa5f0">
-                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#order"></use>
-                        </svg>
+                        <van-icon class="iconfont icon-dingdan"></van-icon>
                     </aside>
                     <div class="myorder-div">
-                        <span>我的订单</span>
+                        <span>{{$t('language.myOrder')}}</span>
                         <span class="myorder-divsvg">
-                            <svg fill="#bbb">
-                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
-                            </svg>
+                            <van-icon class="iconfont icon-gengduo"></van-icon>
                         </span>
                     </div>
                 </router-link>
                 <!-- 积分商城 -->
                 <a href='https://home.m.duiba.com.cn/#/chome/index' class="myorder">
                     <aside>
-                        <svg fill="#fc7b53">
-                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#point"></use>
-                        </svg>
+                        <van-icon class="iconfont icon-jifen"></van-icon>
                     </aside>
                     <div class="myorder-div">
-                        <span>积分商城</span>
+                        <span>{{$t('language.pointMall')}}</span>
                         <span class="myorder-divsvg">
-                            <svg fill="#bbb">
-                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
-                            </svg>
+                            <van-icon class="iconfont icon-gengduo"></van-icon>
                         </span>
                     </div>
                 </a>
                 <!-- 饿了么会员卡 -->
                 <router-link to='/vipcard' class="myorder">
                     <aside>
-                        <svg fill="#ffc636">
-                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#vip"></use>
-                        </svg>
+                        <van-icon class="iconfont icon-huiyuan"></van-icon>
                     </aside>
                     <div class="myorder-div">
-                        <span>饿了么会员卡</span>
+                        <span>{{$t('language.hopeTravelVip')}}</span>
                         <span class="myorder-divsvg">
-                            <svg fill="#bbb">
-                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
-                            </svg>
+                            <van-icon class="iconfont icon-gengduo"></van-icon>
                         </span>
                     </div>
                 </router-link>
@@ -98,32 +82,24 @@
                 <!-- 服务中心 -->
                 <router-link to='/service' class="myorder">
                     <aside>
-                        <svg fill="#4aa5f0">
-                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#service"></use>
-                        </svg>
+                       <van-icon class="iconfont icon-shangcheng"></van-icon>
                     </aside>
                     <div class="myorder-div">
-                        <span>服务中心</span>
+                        <span>{{$t('language.serviceCenter')}}</span>
                         <span class="myorder-divsvg">
-                            <svg fill="#bbb">
-                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
-                            </svg>
+                            <van-icon class="iconfont icon-gengduo"></van-icon>
                         </span>
                     </div>
                 </router-link>
-                <!-- 下载饿了么APP -->
+                <!-- 下载APP -->
                 <router-link to='/download' class="myorder">
                     <aside>
-                        <svg fill="#3cabff">
-                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#download"></use>
-                        </svg>
+                        <van-icon class="iconfont icon-shezhi"></van-icon>
                     </aside>
                     <div class="myorder-div" style="border-bottom:0;">
-                        <span>下载饿了么APP</span>
+                        <span>{{$t('language.downloadApp')}}</span>
                         <span class="myorder-divsvg">
-                            <svg fill="#bbb">
-                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
-                            </svg>
+                            <van-icon class="iconfont icon-gengduo"></van-icon>
                         </span>
                     </div>
                 </router-link>
@@ -147,9 +123,9 @@ export default {
     data(){
         return{
             profiletitle: '我的',
-            username: '登录/注册',           //用户名
+            username: '',           //用户名
             resetname: '',
-            mobile: '暂无绑定手机号',             //电话号码
+            mobile: '',             //电话号码
             balance: 0,            //我的余额
             count : 0,             //优惠券个数
             pointNumber : 0,       //积分数
@@ -196,8 +172,8 @@ export default {
                 this.count = this.userInfo.gift_amount;
                 this.pointNumber = this.userInfo.point;
             }else{
-                this.username = '登录/注册';
-                this.mobile = '暂无绑定手机号';
+               /*  this.username = '登录/注册'; */
+                /* this.mobile = '暂无绑定手机号'; */
             }
         },
     },
@@ -234,11 +210,12 @@ export default {
                 @include wh(2.5rem,2.5rem);
                 border-radius:50%;
                 vertical-align:middle;
-                .privateImage-svg{
+                background:$fc;
+                /* .privateimage{
                     background:$fc;
                     border-radius:50%;
                     @include wh(2.5rem,2.5rem);
-                }
+                } */
             }
             .user-info{
                 margin-left:.48rem;
