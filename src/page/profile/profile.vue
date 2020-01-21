@@ -1,7 +1,17 @@
 <template>
     <div class="profile_page">
-        <head-top :head-title="profiletitle"></head-top>
-        <section>
+        <head-top >
+            <span class="message verticalMiddle" slot="message">
+                <van-icon class="iconfont icon-xiaoxi " ></van-icon>
+            </span>
+            <span class="scan verticalMiddle" slot="scan">
+                <van-icon class="iconfont icon-dingyue- " ></van-icon>
+            </span>
+            <span class="set verticalMiddle" slot="set">
+                <van-icon class="iconfont icon-shezhi " ></van-icon>
+            </span>
+        </head-top>
+        <section class="user-main">
             <section class="profile-number">
                 <router-link :to="userInfo&&userInfo.user_id? '/profile/info' : '/login'" class="profile-link">
                     <img :src="imgBaseUrl + userInfo.avatar" class="privateImage" v-if="userInfo&&userInfo.user_id">
@@ -19,9 +29,6 @@
                             <span class="icon-mobile-number" v-else>{{$t('language.mobile')}}</span>
                         </p>
                     </div>
-                    <span class="arrow">
-                        <van-icon class="iconfont icon-gengduo"></van-icon>
-                    </span>
                 </router-link>
             </section>
             <section class="info-data">
@@ -122,7 +129,6 @@ import {getImgPath} from 'src/components/common/mixin'
 export default {
     data(){
         return{
-            profiletitle: '我的',
             username: '',           //用户名
             resetname: '',
             mobile: '',             //电话号码
@@ -146,6 +152,10 @@ export default {
         ...mapState([
             'userInfo',
         ]),
+
+        titleOwn(){
+            return this.$t('language.own')
+        },
         //后台会返回两种头像地址格式，分别处理
         imgpath:function () {
             let path;
@@ -192,160 +202,177 @@ export default {
     .profile_page{
         p, span{
             font-family: Helvetica Neue,Tahoma,Arial;
+            @include verticalMiddle;
+           
+        }
+        .message{
+             @include ct;
+            left: 0.5rem;
+        }
+        .scan{
+             @include ct;
+            right: 1.5rem;
+        }
+        .set{
+             @include ct;
+            right: 0.5rem;
         }
     }
-   .profile-number{
-        padding-top:1.95rem;
-        .profile-link{
-            display:block;
-            display:flex;
-            box-align: center;
-            -webkit-box-align: center;
-            -ms-flex-align: center;
-            align-items: center;
-            background:$blue;
-            padding: .666667rem .6rem;
-            .privateImage{
-                display:inline-block;
-                @include wh(2.5rem,2.5rem);
-                border-radius:50%;
-                vertical-align:middle;
-                background:$fc;
-                /* .privateimage{
-                    background:$fc;
-                    border-radius:50%;
-                    @include wh(2.5rem,2.5rem);
-                } */
-            }
-            .user-info{
-                margin-left:.48rem;
-                -webkit-box-flex: 1;
-                -ms-flex-positive: 1;
-                flex-grow: 1;
-                p{
-                    font-weight:700;
-                    @include sc(.8rem,$fc);
-                    .user-icon{
-                        @include wh(0.5rem,0.75rem);
+    .user-main{
+        padding: 0 0.6rem;
+        .profile-number{
+                padding-top:1.95rem;
+                .profile-link{
+                    display:block;
+                    display:flex;
+                    box-align: center;
+                    -webkit-box-align: center;
+                    -ms-flex-align: center;
+                    align-items: center;
+                    padding: .666667rem 0;
+                    .privateImage{
                         display:inline-block;
+                        @include wh(2.5rem,2.5rem);
+                        border-radius:50%;
                         vertical-align:middle;
-                        line-height:0.75rem;
-                        .icon-mobile{
+                        background:$fc;
+                        /* .privateimage{
+                            background:$fc;
+                            border-radius:50%;
+                            @include wh(2.5rem,2.5rem);
+                        } */
+                    }
+                    .user-info{
+                        margin-left:.48rem;
+                        -webkit-box-flex: 1;
+                        -ms-flex-positive: 1;
+                        flex-grow: 1;
+                        p{
+                            font-weight:700;
+                            @include sc(.8rem);
+                            .user-icon{
+                                @include wh(0.5rem,0.75rem);
+                                display:inline-block;
+                                vertical-align:middle;
+                                line-height:0.75rem;
+                                .icon-mobile{
+                                    @include wh(100%,100%);
+                                }
+                            }
+                            .icon-mobile-number{
+                                display:inline-block;
+                                @include sc(.57333rem);
+
+                            }
+                        }
+
+                    }
+                    .arrow{
+                        @include wh(.46667rem,.98rem);
+                        display:inline-block;
+                        svg{
+                        @include wh(100%,100%);
+                        }
+                    }
+                }
+        }
+        .info-data{
+                width:100%;
+                background:$fc;
+                box-sizing: border-box;
+                ul{
+                    
+                    box-shadow:0 0 5px 5px #eee;
+                    .info-data-link{
+                        float:left;
+                        width:33.33%;
+                        span{
+                            display:block;
+                            width:100%;
+                            text-align:center;
+                        }
+                        .info-data-top{
+                            @include sc(.55rem,#333);
+                            padding: .853333rem 0 .453333rem;
+                            b{
+                                display:inline-block;
+                                @include sc(1.2rem,#f90);
+                                font-weight:700;
+                                line-height:1rem;
+                                font-family: Helvetica Neue,Tahoma;
+                            }
+                        }
+                        .info-data-bottom{
+                            @include sc(.57333rem,#666);
+                            font-weight:400;
+                            padding-bottom:.453333rem;
+
+                        }
+                    }
+                    .info-data-link:nth-of-type(2){
+                        .info-data-top{
+                            b{
+                                color:#ff5f3e;
+                            }
+                        }
+
+                    }
+                    .info-data-link:nth-of-type(3){
+                        border:0;
+                        .info-data-top{
+                            b{
+                                color:#6ac20b;
+                            }
+                        }
+                    }
+                }
+        }
+        .profile-1reTe{
+                margin-top:.4rem;
+                background:$fc;
+                .myorder{
+                    padding-left:0.6rem;
+                    display:flex;
+                    align-items: center;
+                    aside{
+                        @include wh(.7rem,.7rem);
+                        /* margin-left:-.866667rem; */
+                        margin-right:.4rem;
+                        display:flex;
+                        align-items: center;
+                        svg{
                             @include wh(100%,100%);
                         }
                     }
-                    .icon-mobile-number{
-                        display:inline-block;
-                        @include sc(.57333rem,$fc);
-
+                    .myorder-div{
+                        width:85%;
+                        border-bottom:1px solid #f1f1f1;
+                        padding:.433333rem .266667rem .433333rem 0;
+                        @include sc(.7rem,#333);
+                        display:flex;
+                        justify-content:space-between;
+                        span{
+                            display:block;
+                        }
+                        .myorder-divsvg{
+                            @include wh(.46667rem,.466667rem);
+                            svg{
+                                @include wh(100%,100%);
+                            }
+                        }
                     }
                 }
-
-            }
-            .arrow{
-                @include wh(.46667rem,.98rem);
-                display:inline-block;
-                svg{
-                   @include wh(100%,100%);
+                .myorder:nth-of-type(3) .myorder-div{
+                    border:0;
+                }
                 }
             }
-        }
-   }
-   .info-data{
-        width:100%;
-        background:$fc;
-        box-sizing: border-box;
-        ul{
-            .info-data-link{
-                float:left;
-                width:33.33%;
-                display:inline-block;
-                border-right:1px solid #f1f1f1;
-                span{
-                    display:block;
-                    width:100%;
-                    text-align:center;
-                }
-                .info-data-top{
-                    @include sc(.55rem,#333);
-                    padding: .853333rem 0 .453333rem;
-                    b{
-                        display:inline-block;
-                        @include sc(1.2rem,#f90);
-                        font-weight:700;
-                        line-height:1rem;
-                        font-family: Helvetica Neue,Tahoma;
-                    }
-                }
-                .info-data-bottom{
-                    @include sc(.57333rem,#666);
-                    font-weight:400;
-                    padding-bottom:.453333rem;
-
-                }
+            .router-slid-enter-active, .router-slid-leave-active {
+                transition: all .4s;
             }
-            .info-data-link:nth-of-type(2){
-                .info-data-top{
-                    b{
-                        color:#ff5f3e;
-                    }
+            .router-slid-enter, .router-slid-leave-active {
+                transform: translate3d(2rem, 0, 0);
+                opacity: 0;
                 }
-
-            }
-            .info-data-link:nth-of-type(3){
-                border:0;
-                .info-data-top{
-                    b{
-                        color:#6ac20b;
-                    }
-                }
-            }
-        }
-   }
-   .profile-1reTe{
-        margin-top:.4rem;
-        background:$fc;
-        .myorder{
-            padding-left:1.6rem;
-            display:flex;
-            align-items: center;
-            aside{
-                @include wh(.7rem,.7rem);
-                margin-left:-.866667rem;
-                margin-right:.266667rem;
-                display:flex;
-                align-items: center;
-                svg{
-                    @include wh(100%,100%);
-                }
-            }
-            .myorder-div{
-                width:100%;
-                border-bottom:1px solid #f1f1f1;
-                padding:.433333rem .266667rem .433333rem 0;
-                @include sc(.7rem,#333);
-                display:flex;
-                justify-content:space-between;
-                span{
-                    display:block;
-                }
-                .myorder-divsvg{
-                    @include wh(.46667rem,.466667rem);
-                    svg{
-                        @include wh(100%,100%);
-                    }
-                }
-            }
-        }
-        .myorder:nth-of-type(3) .myorder-div{
-            border:0;
-        }
-    }
-    .router-slid-enter-active, .router-slid-leave-active {
-        transition: all .4s;
-    }
-    .router-slid-enter, .router-slid-leave-active {
-        transform: translate3d(2rem, 0, 0);
-        opacity: 0;
-    }
+    
 </style>

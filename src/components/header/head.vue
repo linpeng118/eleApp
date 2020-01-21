@@ -1,7 +1,8 @@
 <template>
     <header id='head_top'>
         <slot name='logo'></slot>
-        <slot name='search'></slot>
+        
+        <slot name="message"></slot> <!-- 信息 -->
         <section class="head_goback" v-if="goBack" @click="$router.go(-1)">
             <van-icon class="iconfont icon-fanhui"></van-icon>
         </section>
@@ -15,6 +16,9 @@
         <section class="title_head ellipsis" v-if="headTitle">
             <span class="title_text">{{headTitle}}</span>
         </section>
+        <slot name='search'></slot> <!-- 搜索 -->
+        <slot name="scan"></slot> <!-- 扫描 -->
+        <slot name="set"></slot>  <!-- 设置 -->
         <slot name="edit"></slot>
         <slot name="msite-title"></slot>
         <slot name="changecity"></slot>
@@ -63,11 +67,14 @@
         z-index: 100;
         left: 0;
         top: 0;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
         @include wh(100%, 1.95rem);
     }
     .head_goback{
         left: 0.4rem;
-        @include wh(0.6rem, 1rem);
+        @include wh(0.6rem);
         line-height: 2.2rem;
         margin-left: .4rem;
     }
@@ -85,11 +92,11 @@
     }
     .title_head{
         @include center;
-        width: 50%;
-        color: #fff;
+        width: 40%;
+        color: #000;
         text-align: center;
         .title_text{
-            @include sc(0.8rem, #fff);
+            @include sc(0.8rem);
             text-align: center;
             font-weight: bold;
         }

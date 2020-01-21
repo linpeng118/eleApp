@@ -1,23 +1,24 @@
 <template>
     <div class="confirmOrderContainer">
-        <section v-if="!showLoading">
+        <section v-if="!showLoading" class="confirmOrderMain">
             <head-top head-title="确认订单" goBack="true" signin-up='confirmOrder'></head-top>
             <router-link :to='{path: "/confirmOrder/chooseAddress", query: {id: checkoutData.cart.id, sig: checkoutData.sig}}' class="address_container">
                 <div class="address_empty_left">
-                    <svg class="location_icon">
-                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#location"></use>
-                    </svg>
-                    <div class="add_address" v-if="!choosedAddress">请添加一个收货地址</div>
+                    <div class="add_address" v-if="!choosedAddress">
+                        <span>请添加一个收货地址</span>
+                        <van-icon name="add-o"></van-icon>
+                    </div>
                     <div v-else class="address_detail_container">
-                        <header>
+                        <div>
+                            <!-- <van-icon class="iconfont icon-zuobiao"></van-icon> -->
                             <span>{{choosedAddress.name}}</span>
                             <span>{{choosedAddress.sex == 1? '先生':'女士'}}</span>
                             <span>{{choosedAddress.phone}}</span>
-                        </header>
-                        <div class="address_detail">
+                        </div>
+                        <!-- <div class="address_detail">
                             <span v-if="choosedAddress.tag" :style="{backgroundColor: iconColor(choosedAddress.tag)}">{{choosedAddress.tag}}</span>
                             <p>{{choosedAddress.address_detail}}</p>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <svg class="address_empty_right">
@@ -25,25 +26,36 @@
                 </svg>
             </router-link>
             <section class="delivery_model container_style">
-                <p class="deliver_text">送达时间</p>
-                <section class="deliver_time">
-                    <p>尽快送达 | 预计 {{checkoutData.delivery_reach_time}}</p>
-                    <p v-if="checkoutData.cart.is_deliver_by_fengniao">蜂鸟专送</p>
-                </section>
+                <div class="delivery_now">
+                    <van-icon class="iconfont icon-dingdan"></van-icon>
+                    <span>立即送</span>
+                </div>
+                <span class="delivery_time"> 预计 {{checkoutData.delivery_reach_time}} 送达</span>
+                <div class="deliver">
+                    <van-icon class="iconfont icon-waimai"></van-icon>
+                    <span>蜂鸟</span>
+                </div>
+                <!-- <span v-if="checkoutData.cart.is_deliver_by_fengniao">蜂鸟专送</span>   -->      
             </section>
             <section class="pay_way container_style">
-                <header class="header_style">
-                    <span>支付方式</span>
+                <div class="header_style">
+                    <div class="order_note">
+                        <span>支付方式</span>
+                        <span>HopeTravel新用户最高减5元</span>
+                    </div>
                     <div class="more_type" @click="showPayWayFun">
                         <span>在线支付</span>
                         <svg class="address_empty_right">
                             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
                         </svg>
                     </div>
-                </header>
-                <section class="hongbo">
+                </div>
+                <section class="red_envelope">
                     <span>红包</span>
-                    <span>暂时只在饿了么 APP 中支持</span>
+                    <div class="red_envelope_more" @click="toRedEnvelope">
+                        <span class="hongbo_status"></span>
+                        <van-icon class="iconfont icon-gengduo"></van-icon>
+                    </div>
                 </section>
             </section>
             <section class="food_list">
@@ -91,7 +103,7 @@
                         </svg>
                     </div>
                 </router-link>
-                <router-link :to="checkoutData.invoice.is_available? '/confirmOrder/invoice': ''" class="hongbo" :class="{support_is_available: checkoutData.invoice.is_available}">
+                <router-link :to="checkoutData.invoice.is_available? '/confirmOrder/invoice': ''" class="red_envelope" :class="{support_is_available: checkoutData.invoice.is_available}">
                     <span>发票抬头</span>
                     <span>
                         {{checkoutData.invoice.status_text}}
@@ -101,10 +113,7 @@
                     </span>
                 </router-link>
             </section>
-            <section class="confrim_order">
-                <p>待支付 ¥{{checkoutData.cart.total}}</p>
-                <p @click="confrimOrder">确认下单</p>
-            </section>
+            
             <transition name="fade">
                 <div class="cover" v-if="showPayWay" @click="showPayWayFun"></div>
             </transition>
@@ -122,8 +131,22 @@
                 </div>
             </transition>
         </section>
+        <section class="confrim_order">
+                <span>已优惠 ￥1000</span>
+                <span>待支付 ￥{{checkoutData.cart.total}}</span>
+                <span @click="confrimOrder">确认下单</span>
+            </section>
         <loading v-if="showLoading"></loading>
-        <alert-tip v-if="showAlert" @closeTip="showAlert = false" :alertText="alertText"></alert-tip>
+        <!-- <alert-tip v-if="showAlert" @closeTip="showAlert = false" :alertText="alertText"></alert-tip> -->
+        <van-dialog
+            v-model="showAlert"
+            title="提示"
+            :message="alertText"
+            :confirm-button-text="confirmText"
+            @confirm="toConfirm"
+            show-cancel-button
+            >
+            </van-dialog>
         <transition name="router-slid" mode="out-in">
             <router-view></router-view>
         </transition>
@@ -131,6 +154,7 @@
 </template>
 
 <script>
+import { Dialog } from 'vant';
     import {mapState, mapMutations} from 'vuex'
     import headTop from 'src/components/header/head'
     import alertTip from 'src/components/common/alertTip'
@@ -151,6 +175,7 @@
                 payWayId: 1, //付款方式
                 showAlert: false, //弹出框
                 alertText: null, //弹出框内容
+                confirmText: "", //弹出框确认信息文本
             }
         },
         created(){
@@ -169,8 +194,8 @@
                 this.SAVE_GEOHASH(this.geohash);
             }
             if (!(this.userInfo && this.userInfo.user_id)) {
-                // this.showAlert = true;
-                // this.alertText = '您还没有登录';
+                this.showAlert = true;
+                this.alertText = '您还没有登录';
             }
         },
         components: {
@@ -202,6 +227,21 @@
             ...mapMutations([
                 'INIT_BUYCART', 'SAVE_GEOHASH', 'CHOOSE_ADDRESS', 'NEED_VALIDATION', 'SAVE_CART_ID_SIG', 'SAVE_ORDER_PARAM', 'ORDER_SUCCESS', 'SAVE_SHOPID'
             ]),
+            toRedEnvelope(){
+                    this.$router.push({path:'/redEnvelope'})           
+            },
+            toConfirm(){
+                if(!(this.userInfo && this.userInfo.user_id)){
+                    this.$router.push({path:'/login'})
+                }
+                else{
+                    this.showAlert = false;
+                    window.scrollTo({
+                        behavior:'smooth',
+                        top:0
+                    })
+                }
+            },
             //初始化数据
             async initData(){
                 let newArr = new Array;
@@ -258,16 +298,18 @@
             },
             //确认订单
             async confrimOrder(){
+                console.log(this.userInfo.user_id);
+                
                 //用户未登录时弹出提示框
                 if (!(this.userInfo && this.userInfo.user_id)) {
                     this.showAlert = true;
-                    this.alertText = '请登录';
-                    return
+                    this.alertText = '登录后才能下单哦';
+                    this.confirmText = '去登陆';
                     //未选择地址则提示
                 }else if(!this.choosedAddress){
                     this.showAlert = true;
                     this.alertText = '请添加一个收货地址';
-                    return
+                    this.confirmText = '去添加地址';
                 }
                 //保存订单
                 this.SAVE_ORDER_PARAM({
@@ -308,10 +350,16 @@
     .confirmOrderContainer{
         padding-top: 1.95rem;
         padding-bottom: 3rem;
+        background-color: $bc;
         p, span{
             font-family: Helvetica Neue,Tahoma,Arial;
         }
+        .confirmOrderMain{
+        width: 90%;
+        margin: 0 auto;
     }
+    }
+    
     .container_style{
         background-color: #fff;
         margin-top: .4rem;
@@ -322,23 +370,22 @@
         @include fj;
         align-items: center;
         padding: 0 0.6rem;
-        background: url(../../images/address_bottom.png) left bottom repeat-x;
-        background-color: #fff;
-        background-size: auto .12rem;
+         background-color: #fff;
         .address_empty_left{
             display: flex;
             align-items: center;
-            .location_icon{
-                @include wh(.8rem, .8rem);
-                fill: $blue;
-                margin-right: .2rem;
-            }
             .add_address{
                 @include sc(.7rem, #333);
+                span{
+                    vertical-align: middle;
+                }
+                i{
+                    vertical-align: sub;
+                }
             }
             .address_detail_container{
                 margin-left: .2rem;
-                header{
+                div{
                     @include sc(.65rem, #333);
                     span:nth-of-type(1){
                         font-size: .8rem;
@@ -370,68 +417,70 @@
         fill: #999;
     }
     .delivery_model{
-        border-left: .2rem solid $blue;
-        min-height: 4rem;
+        min-height: 2rem;
+        font-size: 0.65rem;
         @include fj;
+        display: flex;
+        flex-flow: row nowrap;
         align-items: center;
-        .deliver_text{
-            @include sc(.8rem, #333);
+        i,span{
+            vertical-align: middle;
+        }
+       .delivery_now{
+           span{
             font-weight: bold;
-            padding-left: .3rem;
-        }
-        .deliver_time{
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            p:nth-of-type(1){
-                @include sc(.7rem, $blue);
-            }
-            p:nth-of-type(2){
-                @include sc(.5rem, #fff);
-                background-color: $blue;
-                width: 2.4rem;
-                margin-top: .5rem;
-                text-align: center;
-                border-radius: 0.12rem;
-                padding: .1rem;
-            }
-        }
+            font-size: 0.8rem;
+           }   
+       }
+       .delivery_time{
+           color: $mainc;
+       }
+       .delivery{
+           display: inline-block;
+       }
     }
     .pay_way{
         .header_style{
             @include fj;
-            line-height: 2rem;
+            padding: 0.5rem 0;
             span:nth-of-type(1){
                 @include sc(.7rem, #666);
             }
             .more_type{
+                display: inline-block;
+                vertical-align: middle;
                 span:nth-of-type(1){
                     @include sc(.6rem, #aaa);
-                    width: 10rem;
+                    /* width: 10rem; */
                     display: inline-block;
                     text-align: right;
                     vertical-align: middle;
                 }
-                svg{
-                    @include wh(.5rem, .5rem);
-                    fill: #ccc;
+            }
+            .order_note{
+                display: inline-block;
+                vertical-align: middle;
+                @include sc(0, #aaa);
+                span{
+                    display: block;
+                }
+                span:nth-of-type(2){
+                    @include sc(.4rem, rgb(221, 21, 48));
                 }
             }
         }
-        .hongbo{
+        .red_envelope{
             @include fj;
             border-top: 0.025rem solid #f5f5f5;
             span{
                 @include sc(.6rem, #aaa);
                 line-height: 2rem;
-                svg{
-                    @include wh(.5rem, .5rem);
-                    vertical-align: middle;
-                    fill: #ccc;
-                }
             }
             span:nth-of-type(2){
                 color: #aaa;
+            }
+            .red_envelope_more{
+                font-size: 0.6rem;
             }
         }
         .support_is_available{
@@ -486,19 +535,26 @@
         bottom: 0;
         width: 100%;
         height: 2rem;
-        p{
+        span{
             line-height: 2rem;
             @include sc(.75rem, #fff);
         }
-        p:nth-of-type(1){
+        span:nth-of-type(1){
             background-color: #3c3c3c;
-            flex: 5;
+            flex: 2;
             padding-left: .7rem;
         }
-        p:nth-of-type(2){
+            span:nth-of-type(2){
+            background-color: #3c3c3c;
             flex: 2;
-            background-color: #56d176;
+            padding-left: .7rem;
+        }
+        span:nth-of-type(3){
+            flex: 0 1 auto;
+            background-color: $mainc;
             text-align: center;
+            padding: 0 .3rem;
+            @include sc(.65rem, #fff);
         }
     }
     .cover{

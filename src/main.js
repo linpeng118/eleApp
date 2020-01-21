@@ -9,6 +9,7 @@ import VueI18n from 'vue-i18n' //i18n语言切换
 
 import Vant from 'vant'
 import 'vant/lib/index.css'
+
 Vue.use(Vant)
 
 if ('addEventListener' in document) {
@@ -31,29 +32,29 @@ const i18n = new VueI18n({
 
 Vue.use(VueRouter)
 const router = new VueRouter({
-        routes,
-        mode: routerMode,
-        strict: process.env.NODE_ENV !== 'production',
-        scrollBehavior(to, from, savedPosition) {
-            if (savedPosition) {
-                return savedPosition
-            } else {
-                if (from.meta.keepAlive) {
-                    from.meta.savedPosition = document.body.scrollTop;
-                }
-                return { x: 0, y: to.meta.savedPosition || 0 }
-            }
-        },
-
-    })
-    /* router.beforeEach((to, from, next) => {
-        if (to.matched.some(item => item.meta.requiresPath)) {
-            next({ path: '/login' })
+    routes,
+    mode: routerMode,
+    strict: process.env.NODE_ENV !== 'production',
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition
         } else {
-            next()
+            if (from.meta.keepAlive) {
+                from.meta.savedPosition = document.body.scrollTop;
+            }
+            return { x: 0, y: to.meta.savedPosition || 0 }
         }
+    },
 
-	}) */
+})
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(item => item.meta.requireLogin) && !sessionStorage.user_message) {
+        next({ path: '/login' })
+    } else {
+        next()
+    }
+
+})
 
 new Vue({
     i18n,

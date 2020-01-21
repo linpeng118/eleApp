@@ -1,11 +1,10 @@
  <template>
     <div>
+        <head-top goBack="true">
+            <input type="text" class="searchBox" placeholder="搜索店内商品" @click="toSearch" slot="search">
+        </head-top>
         <section v-if="!showLoading" class="shop_container">
-            <nav class="goback" @click="goback">
-                <svg width="4rem" height="100%" xmlns="http://www.w3.org/2000/svg" version="1.1">
-                    <polyline points="12,18 4,9 12,0" style="fill:none;stroke:rgb(255,255,255);stroke-width:3"/>
-                </svg>
-            </nav>
+           
             <header class="shop_detail_header" ref="shopheader" :style="{zIndex: showActivities? '14':'10'}">
                 <img :src="imgBaseUrl + shopDetailData.image_path" class="header_cover_img">
                 <section class="description_header">
@@ -316,6 +315,7 @@
 </template>
 
 <script>
+    import headTop from 'src/components/header/head'
     import {mapState, mapMutations} from 'vuex'
     import {msiteAddress, shopDetails, foodMenu, getRatingList, ratingScores, ratingTags} from 'src/service/getData'
     import loading from 'src/components/common/loading'
@@ -379,6 +379,7 @@
         },
         mixins: [loadMore, getImgPath],
         components: {
+            headTop,
             loading,
             ratingStar,
             buyCart,
@@ -655,9 +656,12 @@
                     this.listenInCart();
                 })
             },
-            goback(){
+            toSearch(){
+                this.$router.push({path:'/search/'})
+            },
+            /* goback(){
                 this.$router.go(-1);
-            }
+            } */
         },
         watch: {
             //showLoading变化时说明组件已经获取初始化数据，在下一帧nextTick进行后续操作
@@ -738,6 +742,11 @@
         img{
             @include wh(100%, 100%);
         }
+    }
+    .searchBox{
+        border-radius: 10px;
+        background-color:#F5F5DC;
+        @include wh(50%, 50%);
     }
     .shop_container{
         display: flex;
@@ -1397,7 +1406,7 @@
                                 align-items: center;
                                 .time_spent_desc{
                                     @include sc(.55rem, #666)
-                                    margin-left: .15rem;
+                                    /* margin-left: .15rem; */
                                 }
                             }
                         }

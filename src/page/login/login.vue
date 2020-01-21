@@ -55,6 +55,7 @@
     import {localapi, proapi, imgBaseUrl} from 'src/config/env'
     import {mapState, mapMutations} from 'vuex'
     import {mobileCode, checkExsis, sendLogin, getcaptchas, accountLogin} from '../../service/getData'
+    import {vertifyCode} from 'src/components/common/mixin'
 
     export default {
         data(){
@@ -74,6 +75,7 @@
                 alertText: null, //提示的内容
             }
         },
+        mixins:['vertifyCode'],
         created(){
             this.getCaptchaCode();
         },
@@ -84,7 +86,7 @@
         computed: {
             //判断手机号码
             rightPhoneNumber: function (){
-                return /^1\d{10}$/gi.test(this.phoneNumber)
+                return /^1[3|5|7|8]\d{9}$/gi.test(this.phoneNumber)
             }
         },
         methods: {
@@ -173,13 +175,16 @@
                     if (!this.loginWay) this.getCaptchaCode();
                 }else{
                     this.RECORD_USERINFO(this.userInfo);
+                    console.log(this.userInfo);
+                    
                     this.$router.go(-1);
 
                 }
             },
             closeTip(){
                 this.showAlert = false;
-            }
+            },
+              
         }
     }
 

@@ -15,5 +15,8 @@ export const language = {
     'vipCenter': '会员中心',
     'orderList': '订单列表',
     'search': '搜索',
-
+    'takeaway': '外卖',
+    'order': '订单',
+    'vip': '会员',
+    'own': '我的',
 }

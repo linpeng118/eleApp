@@ -43,7 +43,6 @@
 </template>
 
 <script>
-import { RadioGroup, Radio } from 'vant';
 import {mapState,mapMutations} from 'vuex'
 // import {imgBaseUrl} from 'src/config/env'
 import {getStore,setStore} from 'src/config/mUtils'
@@ -108,8 +107,6 @@ export default {
         })
     },
     components: {
-			[RadioGroup.name]:RadioGroup,
-      [Radio.name]:Radio,
     	headTop,
     	shopList,
 			footGuide,

@@ -46,7 +46,7 @@ const questionDetail = r => require.ensure([], () => r(require('../page/service/
 const find = r => require.ensure([], () => r(require('../page/find/find')), 'find')
 const download = r => require.ensure([], () => r(require('../page/download/download')), 'download')
 const vip = r => require.ensure([], () => r(require('../page/vip/vip')), 'vip')
-
+const redEnvelope = r => require.ensure([], () => r(require('../page/redEnvelope/redEnvelope')), 'redEnvelope')
 
 
 export default [{
@@ -84,15 +84,19 @@ export default [{
             component: food
         },
         //搜索页
-        {
+        /* {
             path: '/search/:geohash',
+            component: search
+        }, */
+        {
+            path: '/search',
             component: search
         },
         //商铺详情页
         {
             path: '/shop',
             component: shop,
-            /* meta: { requiresPath: true }, */
+
             children: [{
                 path: 'foodDetail', //食品详情页
                 component: foodDetail,
@@ -109,7 +113,7 @@ export default [{
         {
             path: '/confirmOrder',
             component: confirmOrder,
-
+            // meta: { requireLogin: true },
             children: [{
                 path: 'remark', //订单备注
                 component: remark,
@@ -179,6 +183,7 @@ export default [{
         {
             path: '/order',
             component: order,
+            meta: { requireLogin: true },
             children: [{
                 path: 'orderDetail', //订单详情页
                 component: orderDetail,
@@ -198,6 +203,12 @@ export default [{
                 path: 'vipDescription', //会员说明
                 component: vipDescription,
             }, ]
+        },
+        //HopeTravel 红包
+        {
+            path: '/redEnvelope',
+            component: redEnvelope,
+            meta: { requireLogin: true },
         },
         //发现页
         {

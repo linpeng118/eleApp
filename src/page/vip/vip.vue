@@ -1,8 +1,8 @@
 <template>
   <div class="paddingTop">
-    <head-top headTitle="会员中心"></head-top>
+    <head-top :headTitle="titleVip"></head-top>
     vip
-    <foot-guide></foot-guide>
+    <foot-guide :vipMessage="vipData"></foot-guide>
   </div>
 </template>
 
@@ -12,7 +12,12 @@ import footGuide from 'src/components/footer/footGuide'
 export default {
   data(){
     return{
-
+      vipData:5,
+    }
+  },
+  computed:{
+    titleVip(){
+      return this.$t('language.vipCenter')
     }
   },
   components:{

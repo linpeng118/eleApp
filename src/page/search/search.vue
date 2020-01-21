@@ -1,6 +1,6 @@
 <template>
   	<div class="paddingTop search_page">
-        <head-top head-title="搜索" ></head-top>
+        <head-top :head-title="titleSearch" ></head-top>
         <form class="search_form">
             <input type="search" name="search" placeholder="请输入商家或美食" class="search_input" v-model="searchValue" @input="checkInput">
             <input type="submit" name="submit" class="search_submit" value="搜索" @click.prevent="searchTarget('')">
@@ -72,6 +72,11 @@ export default {
     },
     created(){
        
+    },
+    computed:{
+        titleSearch(){
+           return  this.$t('language.search');
+        }
     },
     mounted(){
         this.geohash = this.$route.params.geohash;

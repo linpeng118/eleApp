@@ -8,7 +8,7 @@
     	<transition name="transitionName" mode="out-in">
 			<router-view v-if="!$route.meta.keepAlive"></router-view>
 		</transition>
-		<svg-icon></svg-icon>	
+		<!-- <svg-icon></svg-icon>	 -->
     </div>
 </template>
 
@@ -21,7 +21,7 @@
 			  
 		  },
     	components:{
-            svgIcon
+            /* svgIcon */
         },
   	}
 

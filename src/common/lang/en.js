@@ -14,4 +14,8 @@ export const language = {
     'vipCenter': 'Vip Center',
     'orderList': 'Order List',
     'search': 'Search',
+    'takeaway': 'Takeaway',
+    'order': 'Order',
+    'vip': 'Vip',
+    'own': 'Own',
 }
