@@ -33,7 +33,7 @@
                 <span class="delivery_time"> 预计 {{checkoutData.delivery_reach_time}} 送达</span>
                 <div class="deliver">
                     <van-icon class="iconfont icon-waimai"></van-icon>
-                    <span>蜂鸟</span>
+                    <span>蜂鸟专送</span>
                 </div>
                 <!-- <span v-if="checkoutData.cart.is_deliver_by_fengniao">蜂鸟专送</span>   -->      
             </section>
